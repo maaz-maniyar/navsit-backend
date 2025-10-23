@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SIT Campus Map Editor</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet/dist/leaflet.css"
+    />
+    <style>
+        body { margin: 0; font-family: Arial; }
+        #map { height: 85vh; width: 100%; }
+        #controls {
+            padding: 10px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        button { padding: 6px 12px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div id="controls">
+    <input type="file" id="file-input" accept=".json">
+    <button id="add-edge">Connect Nodes</button>
+    <button id="delete-edge">Delete Edge</button>
+    <button id="export-json">Export JSON</button>
+    <span id="status"></span>
+</div>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([13.3223, 77.1234], 17);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+    var nodes = {};       // {name: [lat, lon]}
+    var markers = {};     // {name: L.marker}
+    var edges = [];       // [[from, to]]
+    var polylines = [];   // list of L.Polyline objects
+
+    // --- Draw nodes ---
+    function drawNodes() {
+        for (let name in nodes) {
+            if (markers[name]) continue;
+            let coord = nodes[name];
+            let marker = L.marker(coord, { draggable:true }).addTo(map).bindPopup(name);
+            marker.on('dragend', function(e){
+                let pos = e.target.getLatLng();
+                nodes[name] = [pos.lat, pos.lng];
+            });
+            markers[name] = marker;
+        }
+    }
+
+    // --- Draw edges ---
+    function drawEdges() {
+        polylines.forEach(line => map.removeLayer(line));
+        polylines = [];
+        edges.forEach(function(e){
+            let from = nodes[e[0]], to = nodes[e[1]];
+            if (!from || !to) return;
+            let line = L.polyline([from, to], { color:'blue', weight:4 }).addTo(map)
+                .bindPopup(e[0]+" → "+e[1]);
+            polylines.push(line);
+        });
+    }
+
+    // --- Add new node ---
+    map.on('click', function(e){
+        let name = prompt("Enter node name:");
+        if(!name) return;
+        let lat = e.latlng.lat, lon = e.latlng.lng;
+        nodes[name] = [lat, lon];
+        let marker = L.marker([lat, lon], { draggable:true }).addTo(map).bindPopup(name);
+        marker.on('dragend', function(ev){
+            let pos = ev.target.getLatLng();
+            nodes[name] = [pos.lat, pos.lng];
+        });
+        markers[name] = marker;
+    });
+
+    // --- Connect nodes ---
+    document.getElementById('add-edge').onclick = function(){
+        let from = prompt("Enter first node:");
+        let to = prompt("Enter second node:");
+        if(!nodes[from] || !nodes[to]) { alert("Invalid node names"); return; }
+        edges.push([from, to]);
+        drawEdges();
+    };
+
+    // --- Delete edges ---
+    document.getElementById('delete-edge').onclick = function(){
+        let from = prompt("Enter first node of edge to delete:");
+        let to   = prompt("Enter second node of edge to delete:");
+        edges = edges.filter(e => !( (e[0]===from && e[1]===to) || (e[0]===to && e[1]===from) ));
+        drawEdges();
+    };
+
+    // --- Export JSON ---
+    document.getElementById('export-json').onclick = function(){
+        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({nodes, edges}, null, 2));
+        let dl = document.createElement('a');
+        dl.setAttribute("href", dataStr);
+        dl.setAttribute("download", "campus_graph.json");
+        dl.click();
+    };
+
+    // --- Load JSON from local file input ---
+    document.getElementById('file-input').addEventListener('change', function(evt){
+        const file = evt.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e){
+            const data = JSON.parse(e.target.result);
+            nodes = data.nodes || {};
+            edges = data.edges || [];
+            // remove old markers and polylines
+            for(let m in markers) map.removeLayer(markers[m]);
+            polylines.forEach(line => map.removeLayer(line));
+            markers = {};
+            polylines = [];
+            drawNodes();
+            drawEdges();
+        }
+        reader.readAsText(file);
+    });
+</script>
+</body>
+</html>

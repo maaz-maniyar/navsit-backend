@@ -1,0 +1,494 @@
+{
+  "nodes": {
+    "SIT Front Gate": [
+      13.331624095990712,
+      77.12728232145311
+    ],
+    "fg_MBA_turn": [
+      13.331258505457043,
+      77.12723135948183
+    ],
+    "MBA Block": [
+      13.331174956346327,
+      77.12752103805543
+    ],
+    "fg_temple_turn": [
+      13.32849122872095,
+      77.12647497653963
+    ],
+    "SIT Shiv Temple": [
+      13.328475563085615,
+      77.12655544281007
+    ],
+    "fg_bbc_turn": [
+      13.32761395157971,
+      77.12634623050691
+    ],
+    "SIT Basketball Court": [
+      13.327801939806434,
+      77.12663054466249
+    ],
+    "SIT Volleyball Court": [
+      13.328094856175506,
+      77.12664127349855
+    ],
+    "Administration Block": [
+      13.326945547812459,
+      77.12613701820375
+    ],
+    "Board Room": [
+      13.326954312884805,
+      77.12676197290422
+    ],
+    "Birla Auditorium": [
+      13.326736671256375,
+      77.12662518024446
+    ],
+    "ECE Block": [
+      13.325989936093274,
+      77.12465643882751
+    ],
+    "SIT Library": [
+      13.327309271664832,
+      77.12542623281479
+    ],
+    "SIT Annexe": [
+      13.327081317477163,
+      77.12536454200745
+    ],
+    "SIT Tennis Court": [
+      13.326851553384532,
+      77.12562203407289
+    ],
+    "Physics And Chemistry Department": [
+      13.326412912237975,
+      77.12660908699037
+    ],
+    "Civil Department": [
+      13.326527794519905,
+      77.12570250034334
+    ],
+    "LBS Block": [
+      13.326559126041875,
+      77.12858855724336
+    ],
+    "BVB Block": [
+      13.326094374716297,
+      77.12806284427644
+    ],
+    "ALP Block": [
+      13.326130928223689,
+      77.12774634361269
+    ],
+    "SIT Canteen": [
+      13.325974270295948,
+      77.12698459625246
+    ],
+    "Media Centre": [
+      13.3258437219453,
+      77.12639987468721
+    ],
+    "CSE Department": [
+      13.325854165815944,
+      77.12648034095766
+    ],
+    "GJCB Building": [
+      13.326282364124076,
+      77.1251767873764
+    ],
+    "SIT Biofuel Plant": [
+      13.325958604497579,
+      77.12511777877809
+    ],
+    "Mechanical Department": [
+      13.32642857800688,
+      77.12483882904054
+    ],
+    "Electrical Department": [
+      13.327013432654345,
+      77.12447941303253
+    ],
+    "EEE_mech_turn": [
+      13.326888106777501,
+      77.1246510744095
+    ],
+    "SIT Post Office ": [
+      13.326456045866529,
+      77.12226390838624
+    ],
+    "SIT Health Centre": [
+      13.326235366785824,
+      77.12717771530153
+    ],
+    "SIT Stadium": [
+      13.327405075600872,
+      77.12402880191804
+    ],
+    "SIT gymnasium": [
+      13.327154424188139,
+      77.12393760681152
+    ],
+    "stadium_bg_turn": [
+      13.32764006106439,
+      77.12415754795074
+    ],
+    "Biotechnology Department": [
+      13.32758784209223,
+      77.12464570999146
+    ],
+    "SIT Coffee Shop": [
+      13.327566954500215,
+      77.12501585483552
+    ],
+    "cr_eee_turn": [
+      13.326882884864558,
+      77.12497830390932
+    ],
+    "cr_mech_turn": [
+      13.326439021852282,
+      77.1249568462372
+    ],
+    "cr_ece_turn": [
+      13.326026489616467,
+      77.12493002414705
+    ],
+    "library_bg_turn": [
+      13.327551152003767,
+      77.12545573711397
+    ],
+    "physics_road": [
+      13.326600764596416,
+      77.1253001689911
+    ],
+    "cr_pr_turn": [
+      13.326640523096879,
+      77.12500780820848
+    ],
+    "pr_csr_turn": [
+      13.326499568395436,
+      77.12610214948656
+    ],
+    "mech_eee_turn": [
+      13.326512903642017,
+      77.12462425231935
+    ],
+    "rr_pr_turn": [
+      13.325883739517185,
+      77.12605386972429
+    ],
+    "MG Block": [
+      13.325421569528602,
+      77.12652057409288
+    ],
+    "rr_birlar_turn": [
+      13.325807993116452,
+      77.12679684162141
+    ],
+    "Architecture Block": [
+      13.327450286477818,
+      77.12704360485078
+    ],
+    "Intersection": [
+      13.327512949278713,
+      77.12633013725282
+    ],
+    "birlar_lbs_turn": [
+      13.326736294074562,
+      77.12694168090822
+    ],
+    "birlar_bvb_turn": [
+      13.326271543089366,
+      77.12687730789186
+    ],
+    "SIT Post Office": [
+      13.326100954895244,
+      77.12230145931245
+    ],
+    "BVB_LBS_turn": [
+      13.32662754842768,
+      77.12806820869447
+    ],
+    "birla_board_turn": [
+      13.326980401920439,
+      77.12663590908052
+    ],
+    "Birla Entrance": [
+      13.327465842738546,
+      77.12666273117067
+    ],
+    "turnn1": [
+      13.327066366049822,
+      77.12576150894166
+    ],
+    "turnn2": [
+      13.326726941724154,
+      77.12595462799074
+    ],
+    "turnn3": [
+      13.326538952661886,
+      77.12593585252763
+    ],
+    "turnn4": [
+      13.327118511848079,
+      77.12660372257233
+    ]
+  },
+  "edges": [
+    [
+      "SIT Stadium",
+      "SIT gymnasium"
+    ],
+    [
+      "stadium_bg_turn",
+      "SIT Stadium"
+    ],
+    [
+      "stadium_bg_turn",
+      "Biotechnology Department"
+    ],
+    [
+      "Biotechnology Department",
+      "SIT Coffee Shop"
+    ],
+    [
+      "SIT Coffee Shop",
+      "cr_eee_turn"
+    ],
+    [
+      "EEE_mech_turn",
+      "cr_eee_turn"
+    ],
+    [
+      "EEE_mech_turn",
+      "Electrical Department"
+    ],
+    [
+      "cr_mech_turn",
+      "Mechanical Department"
+    ],
+    [
+      "cr_mech_turn",
+      "cr_ece_turn"
+    ],
+    [
+      "ECE Block",
+      "cr_ece_turn"
+    ],
+    [
+      "SIT Biofuel Plant",
+      "cr_ece_turn"
+    ],
+    [
+      "library_bg_turn",
+      "SIT Coffee Shop"
+    ],
+    [
+      "library_bg_turn",
+      "SIT Library"
+    ],
+    [
+      "SIT Library",
+      "SIT Annexe"
+    ],
+    [
+      "SIT Annexe",
+      "physics_road"
+    ],
+    [
+      "cr_pr_turn",
+      "cr_mech_turn"
+    ],
+    [
+      "cr_pr_turn",
+      "cr_eee_turn"
+    ],
+    [
+      "cr_pr_turn",
+      "physics_road"
+    ],
+    [
+      "physics_road",
+      "Civil Department"
+    ],
+    [
+      "SIT Annexe",
+      "SIT Tennis Court"
+    ],
+    [
+      "EEE_mech_turn",
+      "mech_eee_turn"
+    ],
+    [
+      "Mechanical Department",
+      "mech_eee_turn"
+    ],
+    [
+      "pr_csr_turn",
+      "rr_pr_turn"
+    ],
+    [
+      "Media Centre",
+      "rr_pr_turn"
+    ],
+    [
+      "CSE Department",
+      "Media Centre"
+    ],
+    [
+      "rr_pr_turn",
+      "SIT Biofuel Plant"
+    ],
+    [
+      "fg_MBA_turn",
+      "SIT Front Gate"
+    ],
+    [
+      "fg_MBA_turn",
+      "fg_temple_turn"
+    ],
+    [
+      "fg_temple_turn",
+      "fg_bbc_turn"
+    ],
+    [
+      "fg_bbc_turn",
+      "Intersection"
+    ],
+    [
+      "fg_temple_turn",
+      "SIT Shiv Temple"
+    ],
+    [
+      "fg_bbc_turn",
+      "SIT Basketball Court"
+    ],
+    [
+      "SIT Volleyball Court",
+      "SIT Basketball Court"
+    ],
+    [
+      "library_bg_turn",
+      "Intersection"
+    ],
+    [
+      "fg_MBA_turn",
+      "MBA Block"
+    ],
+    [
+      "rr_birlar_turn",
+      "MG Block"
+    ],
+    [
+      "rr_birlar_turn",
+      "CSE Department"
+    ],
+    [
+      "birlar_bvb_turn",
+      "SIT Health Centre"
+    ],
+    [
+      "SIT Health Centre",
+      "ALP Block"
+    ],
+    [
+      "ALP Block",
+      "BVB Block"
+    ],
+    [
+      "BVB_LBS_turn",
+      "LBS Block"
+    ],
+    [
+      "BVB_LBS_turn",
+      "BVB Block"
+    ],
+    [
+      "Architecture Block",
+      "birlar_lbs_turn"
+    ],
+    [
+      "birlar_lbs_turn",
+      "birlar_bvb_turn"
+    ],
+    [
+      "birlar_bvb_turn",
+      "rr_birlar_turn"
+    ],
+    [
+      "rr_birlar_turn",
+      "SIT Canteen"
+    ],
+    [
+      "birlar_lbs_turn",
+      "BVB_LBS_turn"
+    ],
+    [
+      "Intersection",
+      "Administration Block"
+    ],
+    [
+      "Intersection",
+      "Birla Entrance"
+    ],
+    [
+      "birla_board_turn",
+      "Birla Auditorium"
+    ],
+    [
+      "birla_board_turn",
+      "Board Room"
+    ],
+    [
+      "Birla Entrance",
+      "Architecture Block"
+    ],
+    [
+      "SIT Library",
+      "turnn1"
+    ],
+    [
+      "turnn1",
+      "turnn2"
+    ],
+    [
+      "turnn2",
+      "turnn3"
+    ],
+    [
+      "Civil Department",
+      "turnn3"
+    ],
+    [
+      "pr_csr_turn",
+      "turnn3"
+    ],
+    [
+      "Physics And Chemistry Department",
+      "pr_csr_turn"
+    ],
+    [
+      "birlar_bvb_turn",
+      "Physics And Chemistry Department"
+    ],
+    [
+      "turnn1",
+      "Administration Block"
+    ],
+    [
+      "turnn2",
+      "Administration Block"
+    ],
+    [
+      "turnn4",
+      "Administration Block"
+    ],
+    [
+      "Birla Entrance",
+      "turnn4"
+    ],
+    [
+      "turnn4",
+      "birla_board_turn"
+    ]
+  ]
+}
