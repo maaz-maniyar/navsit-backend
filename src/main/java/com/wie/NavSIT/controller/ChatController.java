@@ -36,7 +36,7 @@ public class ChatController {
         Double userLon = (Double) request.get("longitude");
 
         // Step 1: Send message to Python NLP service
-        String pythonUrl = "http://localhost:5000/parse"; // Python Flask endpoint
+        String pythonUrl = "https://mocknlp-production.up.railway.app/parse";
         Map<String, String> payload = Map.of("message", userMessage);
         JsonNode response = restTemplate.postForObject(pythonUrl, payload, JsonNode.class);
 
