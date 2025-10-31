@@ -107,33 +107,45 @@ public class NavigationService {
         Map<String, Object> result = new HashMap<>();
         if (path == null || path.isEmpty()) return result;
 
+        // 1. Find nearest node along path
+        String nearestNode = null;
+        double minDistance = Double.MAX_VALUE;
+        for (String node : path) {
+            double[] coords = graph.nodes.get(node);
+            double distance = CampusGraph.haversine(lat, lon, coords[0], coords[1]);
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestNode = node;
+            }
+        }
 
-        String nearest = graph.findNearestNode(lat, lon);
-        result.put("currentNode", nearest);
+        result.put("currentNode", nearestNode);
+        int idx = path.indexOf(nearestNode);
 
-
-        int idx = -1;
-        if (nearest != null) idx = path.indexOf(nearest);
-
-
-        if (idx == -1) {
-// Not exactly on node — return next path node (1st remaining)
-            result.put("nextNode", path.size() > 1 ? path.get(1) : path.get(0));
-            result.put("nextCoordinates", graph.nodes.get(result.get("nextNode")));
-            result.put("reply", "Continue toward " + result.get("nextNode"));
-        } else if (idx < path.size() - 1) {
-// Trim path and return next
-            List<String> remaining = path.subList(idx, path.size());
-            result.put("remainingPath", remaining);
-            result.put("nextNode", remaining.size() > 1 ? remaining.get(1) : null);
-            result.put("nextCoordinates", remaining.size() > 1 ? graph.nodes.get(remaining.get(1)) : null);
-            result.put("reply", remaining.size() > 1 ? "Proceeding to next: " + remaining.get(1) : "Reached destination");
-        } else {
+        // 2. If near the destination
+        if (idx == path.size() - 1) {
             result.put("nextNode", null);
             result.put("nextCoordinates", null);
-            result.put("reply", "You\'ve reached your destination!");
+            result.put("reply", "You've reached your destination!");
+            return result;
         }
+
+        // 3. If the user is close enough (within ~15 meters), move to next node
+        double[] nearestCoords = graph.nodes.get(nearestNode);
+        double distanceToNearest = CampusGraph.haversine(lat, lon, nearestCoords[0], nearestCoords[1]);
+        if (distanceToNearest < 15 && idx + 1 < path.size()) {
+            nearestNode = path.get(idx + 1);
+            idx++;
+        }
+
+        // 4. Define next node based on current index
+        String nextNode = (idx + 1 < path.size()) ? path.get(idx + 1) : path.get(idx);
+        result.put("nextNode", nextNode);
+        result.put("nextCoordinates", graph.nodes.get(nextNode));
+        result.put("reply", "Continue towards " + nextNode);
+
         return result;
     }
+
 }
 
