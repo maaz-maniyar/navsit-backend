@@ -23,7 +23,7 @@ public class ChatController {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // per-user active paths (simple map). For multi-user scale, replace with DB/session store
+    // Per-user active paths (simple in-memory map)
     private final Map<String, List<String>> activePaths = new HashMap<>();
 
     @PostMapping
@@ -33,11 +33,13 @@ public class ChatController {
         Double userLon = request.get("longitude") != null ? ((Number) request.get("longitude")).doubleValue() : null;
 
         String pythonUrl = "https://mocknlp-production.up.railway.app/parse";
+
         Map<String, String> payload = Map.of("message", userMessage);
         JsonNode response = restTemplate.postForObject(pythonUrl, payload, JsonNode.class);
 
-        String intent = response.get("intent").asText();
+        String intent = response.has("intent") ? response.get("intent").asText() : "unknown";
         String entity = response.has("entity") ? response.get("entity").asText() : null;
+        String answer = response.has("response") ? response.get("response").asText() : "I'm not sure how to respond.";
 
         CampusGraph graph = loader.getGraph();
         Map<String, Object> result = new HashMap<>();
@@ -60,7 +62,6 @@ public class ChatController {
                 result.put("reply", "Sorry, I couldn't find a route to " + entity + ".");
             }
         } else {
-            String answer = response.has("answer") ? response.get("answer").asText() : "I'm not sure how to respond.";
             result.put("reply", answer);
         }
 
