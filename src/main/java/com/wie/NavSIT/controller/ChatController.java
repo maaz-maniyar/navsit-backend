@@ -38,13 +38,21 @@ public class ChatController {
         JsonNode response = restTemplate.postForObject(pythonUrl, payload, JsonNode.class);
 
         String intent = response.has("intent") ? response.get("intent").asText() : "unknown";
-        String entity = response.has("entity") ? response.get("entity").asText() : null;
+        String entity = null;
+        if (response.has("entity")) {
+            if (response.get("entity").isArray() && response.get("entity").size() > 0) {
+                entity = response.get("entity").get(0).asText();
+            } else {
+                entity = response.get("entity").asText();
+            }
+        }
         String answer = response.has("response") ? response.get("response").asText() : "I'm not sure how to respond.";
 
         CampusGraph graph = loader.getGraph();
         Map<String, Object> result = new HashMap<>();
 
-        if ("navigation".equalsIgnoreCase(intent) && entity != null && userLat != null && userLon != null) {
+        if ((intent.equalsIgnoreCase("navigation") || intent.equalsIgnoreCase("navigation_request"))
+                && entity != null && userLat != null && userLon != null) {
             String currentNode = graph.findNearestNode(userLat, userLon);
             List<String> path = navigationService.shortestPath(currentNode, entity);
 
