@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.wie.NavSIT.model.CampusGraph;
 import com.wie.NavSIT.service.GraphLoader;
 import com.wie.NavSIT.service.NavigationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -16,20 +18,24 @@ import java.util.*;
 @RequestMapping("/api/chat")
 @CrossOrigin(origins = "*")
 public class ChatController {
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
-    @Autowired
-    private GraphLoader loader;
-
-    @Autowired
-    private NavigationService navigationService;
+    private final GraphLoader loader;
+    private final NavigationService navigationService;
+    private final RestTemplate restTemplate;
 
     @Value("${app.nlp.parse-url}")
     private String pythonUrl;
 
-    private final RestTemplate restTemplate = new RestTemplate();
-
     // Per-user active paths (simple in-memory map)
     private final Map<String, List<String>> activePaths = new HashMap<>();
+
+    @Autowired
+    public ChatController(GraphLoader loader, NavigationService navigationService, RestTemplate restTemplate) {
+        this.loader = loader;
+        this.navigationService = navigationService;
+        this.restTemplate = restTemplate;
+    }
 
     @PostMapping
     public Map<String, Object> handleMessage(@RequestBody Map<String, Object> request) {
@@ -40,8 +46,9 @@ public class ChatController {
         Map<String, String> payload = Map.of("message", userMessage);
         JsonNode response;
         try {
-            response = restTemplate.postForObject(pythonUrl, payload, JsonNode.class);
+            response = postToNlpWithRetry(payload);
         } catch (RestClientException ex) {
+            logger.error("NLP request failed after retries. url={}, message={}", pythonUrl, ex.getMessage(), ex);
             return Map.of("reply", "The NLP service is unavailable right now. Please try again in a moment.");
         }
 
@@ -89,6 +96,31 @@ public class ChatController {
         }
 
         return result;
+    }
+
+    private JsonNode postToNlpWithRetry(Map<String, String> payload) {
+        RestClientException lastException = null;
+
+        for (int attempt = 1; attempt <= 2; attempt++) {
+            try {
+                logger.info("Calling NLP service. attempt={}, url={}", attempt, pythonUrl);
+                return restTemplate.postForObject(pythonUrl, payload, JsonNode.class);
+            } catch (RestClientException ex) {
+                lastException = ex;
+                logger.warn("NLP call attempt {} failed. url={}, error={}", attempt, pythonUrl, ex.getMessage());
+
+                if (attempt < 2) {
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException interruptedException) {
+                        Thread.currentThread().interrupt();
+                        throw new RestClientException("Interrupted while retrying NLP request", interruptedException);
+                    }
+                }
+            }
+        }
+
+        throw lastException;
     }
 
     private boolean isNavigationIntent(String intent, String intentType) {
