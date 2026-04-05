@@ -5,7 +5,9 @@ import com.wie.NavSIT.model.CampusGraph;
 import com.wie.NavSIT.service.GraphLoader;
 import com.wie.NavSIT.service.NavigationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -21,6 +23,9 @@ public class ChatController {
     @Autowired
     private NavigationService navigationService;
 
+    @Value("${app.nlp.parse-url}")
+    private String pythonUrl;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     // Per-user active paths (simple in-memory map)
@@ -32,14 +37,24 @@ public class ChatController {
         Double userLat = request.get("latitude") != null ? ((Number) request.get("latitude")).doubleValue() : null;
         Double userLon = request.get("longitude") != null ? ((Number) request.get("longitude")).doubleValue() : null;
 
-        String pythonUrl = "https://mocknlp-production.up.railway.app/parse";
-
         Map<String, String> payload = Map.of("message", userMessage);
-        JsonNode response = restTemplate.postForObject(pythonUrl, payload, JsonNode.class);
+        JsonNode response;
+        try {
+            response = restTemplate.postForObject(pythonUrl, payload, JsonNode.class);
+        } catch (RestClientException ex) {
+            return Map.of("reply", "The NLP service is unavailable right now. Please try again in a moment.");
+        }
+
+        if (response == null) {
+            return Map.of("reply", "The NLP service returned an empty response.");
+        }
 
         String intent = response.has("intent") ? response.get("intent").asText() : "unknown";
+        String intentType = response.has("intent_type") ? response.get("intent_type").asText() : intent;
         String entity = null;
-        if (response.has("entity")) {
+        if (response.has("destination") && !response.get("destination").isNull()) {
+            entity = response.get("destination").asText();
+        } else if (response.has("entity")) {
             if (response.get("entity").isArray() && response.get("entity").size() > 0) {
                 entity = response.get("entity").get(0).asText();
             } else {
@@ -51,7 +66,7 @@ public class ChatController {
         CampusGraph graph = loader.getGraph();
         Map<String, Object> result = new HashMap<>();
 
-        if ((intent.equalsIgnoreCase("navigation") || intent.equalsIgnoreCase("navigation_request"))
+        if (isNavigationIntent(intent, intentType)
                 && entity != null && userLat != null && userLon != null) {
             String currentNode = graph.findNearestNode(userLat, userLon);
             List<String> path = navigationService.shortestPath(currentNode, entity);
@@ -74,6 +89,15 @@ public class ChatController {
         }
 
         return result;
+    }
+
+    private boolean isNavigationIntent(String intent, String intentType) {
+        return startsWithIgnoreCase(intent, "navigation")
+                || startsWithIgnoreCase(intentType, "navigation");
+    }
+
+    private boolean startsWithIgnoreCase(String value, String prefix) {
+        return value != null && value.regionMatches(true, 0, prefix, 0, prefix.length());
     }
 
     @PostMapping("/update-node")
